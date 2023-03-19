@@ -14,7 +14,7 @@ public class GenerateRoom : MonoBehaviour
     public float wallHeight = 3.0f;
     public float wallThickness = 0.4f;
 
-    private Vector3 roomDimension; // width, length, height
+    private Vector3 roomDimension; // x = width, y = height, z = length
     private float maxLength = 20.0f;
     private float minLength = 3.0f;
 
@@ -42,28 +42,71 @@ public class GenerateRoom : MonoBehaviour
     //Each new instantiate, re-randomize width/length for walls and change their positions (keep track of 4 walls)
     void generateRoom() {
         // randomize room sizes
-        roomDimension = new Vector3(Random.Range(minLength, maxLength), Random.Range(minLength, maxLength), wallHeight);
+        roomDimension = new Vector3(Random.Range(minLength, maxLength), wallHeight, Random.Range(minLength, maxLength));
         // change scaling
-        walls[0].transform.localScale = new Vector3(wallThickness, wallHeight, roomDimension.y);
-        walls[1].transform.localScale = new Vector3(wallThickness, wallHeight, roomDimension.y);
-        walls[2].transform.localScale = new Vector3(roomDimension.x, wallHeight, wallThickness);
-        walls[3].transform.localScale = new Vector3(roomDimension.x, wallHeight, wallThickness);
-        walls[4].transform.localScale = new Vector3(roomDimension.x, 1, roomDimension.y); // weird
+        walls[0].transform.localScale = new Vector3(wallThickness, roomDimension.y, roomDimension.z);
+        walls[1].transform.localScale = new Vector3(wallThickness, roomDimension.y, roomDimension.z);
+        walls[2].transform.localScale = new Vector3(roomDimension.x, roomDimension.y, wallThickness);
+        walls[3].transform.localScale = new Vector3(roomDimension.x, roomDimension.y, wallThickness);
+        walls[4].transform.localScale = new Vector3(roomDimension.x, 1, roomDimension.z); // weird
         // change position
         walls[0].transform.position = new Vector3(roomDimension.x/2, 0, 0);
         walls[1].transform.position = new Vector3(-roomDimension.x/2, 0, 0);
-        walls[2].transform.position = new Vector3(0, 0, roomDimension.y/2);
-        walls[3].transform.position = new Vector3(0, 0, -roomDimension.y/2);
+        walls[2].transform.position = new Vector3(0, 0, roomDimension.z/2);
+        walls[3].transform.position = new Vector3(0, 0, -roomDimension.z/2);
     }
 
+    void generateFloorItems() {
+        float r = Random.Range(0.0f, 1.0f);
+        if (r > 0.5f) generateFurniture();
+        else generateStackable();
+    }
     void generateFurniture() {
+        var pos = getRandomPos(-roomDimension.y/2, -roomDimension.z/2, roomDimension.z/2, -roomDimension.x/2, -roomDimension.x/2);
 
     }
 
-    Vector3 getFurniturePos(float floor, float l, float r, float t, float d) {
+    void generateStackable(int layer) {
+        if (layer == 0) { // top layer, small items
+            int maxSmallItems = 5; // depend on size of what's below
+            int n = Random.Range(0, maxSmallItems);
+            for (int i = 0; i < n; i++) {
+                instantiateSmallItem();
+            }
+        } else {
+
+            layer--;
+            generateStackable();
+        }
+    }
+
+    void instantiateSmallItem() {
+        var position = getRandomPos(); 
+        // get random asset 
+        int itemIndex = Random.Range(0, listSmallItems.size()-1);
+        Instantiate(listSmallItems[itemIndex], position, Quaternion.identity);
+    }
+
+    Vector3 getRandomPos(float floor, float l, float r, float t, float d) { // lrtd = -z, z, -x, x
         var position = new Vector3(Random.Range(l, r), floor, Random.Range(d, t));
         // check for collisions
-    
+
         return position;
+    }
+
+    GameObject getRandomItem(int itemType, ) {
+        int listSize;
+        if (itemType == 0) { // furniture
+            listSize = listFurniture.size();
+        } 
+        if (itemType == 1) { // stackable
+            listSize = listStackableItems.size();
+        } 
+        if (itemType == 2) { // small
+            listSize = listSmallItems.size();
+        }
+        int itemIndex = Random.Range(0, listSize-1);
+        return 
+        Instantiate(listSmallItems[itemIndex], position, Quaternion.identity);
     }
 }
