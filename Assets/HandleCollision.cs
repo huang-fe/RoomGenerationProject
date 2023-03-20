@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class HandleCollision : MonoBehaviour
 {
-
+    void Start() {
+        int r = Random.Range(0, 3);
+        for (int i = 0; i < r; i++) {
+            transform.Rotate(new Vector3(0, 90, 0));
+        }
+    }
     void OnCollisionEnter(Collision collision)
     {
         // GameObject o = collision.gameObject;

@@ -104,7 +104,7 @@ public class GenerateRoom : MonoBehaviour
         b += new Vector4(l/2, -l/2, l/2, -l/2);
         floor += c.size.y/2;
         var pos = getRandomPos(floor, b);
-        instantiated.Add(Instantiate(obj, pos, Quaternion.identity)); 
+        instantiated.Add(Instantiate(obj, pos, obj.transform.rotation)); 
 
         float top_of_furniture = pos.y + c.size.y;
         float obj_width_halved = c.size.x/2;
@@ -128,14 +128,14 @@ public class GenerateRoom : MonoBehaviour
     // generates >=1 stackable items & potentially things on top
     // void generateStackable(Vector3 pos) { 
     //     GameObject obj = getRandomItem(listStackable);
-    //     Instantiate(obj, pos, Quaternion.identity);
+    //     Instantiate(obj, pos, obj.transform.rotation);
     //     var top_of_stack = pos + new Vector3(0, obj.GetComponent<Collider>().bounds.size.y, 0);
         
     //     // n stackable items
     //     int nStack =  Random.Range(0, 5);
     //     for (int i = 0; i < nStack; i++) {
     //         obj = getRandomItem(listStackable);
-    //         Instantiate(obj, top_of_stack, Quaternion.identity);
+    //         Instantiate(obj, top_of_stack, obj.transform.rotation);
     //         top_of_stack = top_of_stack + new Vector3(0, obj.GetComponent<Collider>().bounds.size.y, 0);
     //     }
 
@@ -154,7 +154,7 @@ public class GenerateRoom : MonoBehaviour
     // void generateSmallItem(Vector3 pos) {
     //     GameObject obj = getRandomItem(listSmallItems);
     //     pos.y += obj.transform.localScale.y/2;
-    //     instantiated.Add(Instantiate(obj, pos, Quaternion.identity));
+    //     instantiated.Add(Instantiate(obj, pos, obj.transform.rotation));
     // }
 
     void generateItem(float floor, Vector4 b, GameObject[] list) {
@@ -166,7 +166,7 @@ public class GenerateRoom : MonoBehaviour
         // b += new Vector4(obj.transform.localScale.x/2, -obj.transform.localScale.x/2, obj.transform.localScale.z/2, -obj.transform.localScale.z/2);
         floor += obj.transform.localScale.y/2;
         var pos = getRandomPos(floor, b);
-        instantiated.Add(Instantiate(obj, pos, Quaternion.identity));
+        instantiated.Add(Instantiate(obj, pos, obj.transform.rotation));
     }
 
     Vector3 getRandomPos(float floor, Vector4 b) { // xyzw = -x, x, -z, z
