@@ -15,6 +15,7 @@ public class GenerateRoom : MonoBehaviour
     public float wallThickness = 0.4f;
 
     private Vector3 roomDimension; // x = width, y = height, z = length
+    private Vector4 roomBounds; // xyzw = -x, x, -z, z
     private float maxLength = 20.0f;
     private float minLength = 5.0f;
 
@@ -76,6 +77,7 @@ public class GenerateRoom : MonoBehaviour
         
         // empty space is smaller
         roomDimension -= new Vector3(wallThickness, 0, wallThickness);
+        roomBounds = new Vector4(-roomDimension.x/2+wallThickness/2, roomDimension.x/2+wallThickness/2, -roomDimension.z/2+wallThickness/2, -roomDimension.z/2+wallThickness/2);
     }
 
     void generateFloorItems() {
@@ -150,10 +152,10 @@ public class GenerateRoom : MonoBehaviour
         instantiated.Add(Instantiate(obj, pos, Quaternion.identity));
     }
 
-    Vector3 getRandomPos(float floor, float l, float r, float t, float d) { // lrtd = -x, x, -z, z
+    Vector3 getRandomPos(float floor, float l, float r, float t, float d, float hw, float hl) { // lrtd = -x, x, -z, z
         var position = new Vector3(Random.Range(l, r), floor, Random.Range(d, t));
-        // check for collisions?
-
+        // collision with walls
+        
         return position;
     }
 
@@ -163,4 +165,6 @@ public class GenerateRoom : MonoBehaviour
         //Debug.Log(list[itemIndex].name);
         return list[itemIndex];
     }
+
+    
 }
