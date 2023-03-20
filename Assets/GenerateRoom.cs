@@ -16,7 +16,7 @@ public class GenerateRoom : MonoBehaviour
 
     private Vector3 roomDimension; // x = width, y = height, z = length
     private float maxLength = 20.0f;
-    private float minLength = 3.0f;
+    private float minLength = 5.0f;
 
     public GameObject[] walls; // array of walls    
 
@@ -73,17 +73,21 @@ public class GenerateRoom : MonoBehaviour
         walls[1].transform.position = new Vector3(-roomDimension.x/2, 0, 0);
         walls[2].transform.position = new Vector3(0, 0, roomDimension.z/2);
         walls[3].transform.position = new Vector3(0, 0, -roomDimension.z/2);
+        
+        // empty space is smaller
+        roomDimension -= new Vector3(wallThickness, 0, wallThickness);
     }
 
     void generateFloorItems() {
         float type = Random.Range(0.0f, 1.0f);
-        var pos = getRandomPos(-roomDimension.y/2, -roomDimension.x/2, roomDimension.x/2, -roomDimension.z/2, roomDimension.z/2);
-        if (type < 0.4f) { 
+        var pos = getRandomPos(0, -roomDimension.x/2, roomDimension.x/2, -roomDimension.z/2, roomDimension.z/2);
+        if (type < 0.4f) {             
             generateSmallItem(pos);
         // } else if (type < 0.4f) { 
         //     generateStackable(pos);
         }
         else { 
+            pos.y -= roomDimension.y/2;
             generateFurniture(pos);
         } 
     }
@@ -92,12 +96,12 @@ public class GenerateRoom : MonoBehaviour
     void generateFurniture(Vector3 pos) {
         // 1 furniture
         GameObject obj = getRandomItem(listFurniture);
-        pos.y += obj.GetComponent<Collider>().bounds.size.y/2;
+        pos.y += obj.transform.localScale.y;
         instantiated.Add(Instantiate(obj, pos, Quaternion.identity)); 
 
-        float top_of_furniture = pos.y + obj.GetComponent<Collider>().bounds.size.y;
-        float obj_width_halved = obj.GetComponent<Collider>().bounds.size.x/2;
-        float obj_length_halved = obj.GetComponent<Collider>().bounds.size.z/2;        
+        float top_of_furniture = pos.y + obj.transform.localScale.y;
+        float obj_width_halved = obj.transform.localScale.x/2;
+        float obj_length_halved = obj.transform.localScale.z/2;        
 
         // num things on top
         int n_on_top = Random.Range(0, 5);
@@ -142,13 +146,13 @@ public class GenerateRoom : MonoBehaviour
     // generates one small item
     void generateSmallItem(Vector3 pos) {
         GameObject obj = getRandomItem(listSmallItems);
-        pos.y += obj.GetComponent<Collider>().bounds.size.y/2;
+        pos.y += obj.transform.localScale.y/2;
         instantiated.Add(Instantiate(obj, pos, Quaternion.identity));
     }
 
     Vector3 getRandomPos(float floor, float l, float r, float t, float d) { // lrtd = -x, x, -z, z
         var position = new Vector3(Random.Range(l, r), floor, Random.Range(d, t));
-        // check for collisions
+        // check for collisions?
 
         return position;
     }

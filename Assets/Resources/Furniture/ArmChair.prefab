@@ -342,6 +342,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4954684548412172}
   - component: {fileID: 7798600265403674210}
+  - component: {fileID: 4445435923623024391}
   m_Layer: 0
   m_Name: ArmChair
   m_TagString: Untagged
@@ -390,8 +391,20 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.4508781, y: 1, z: 2.8229556}
+  m_Center: {x: 0.34745586, y: -1.4459255e-15, z: 0.49800056}
+--- !u!114 &4445435923623024391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215126968702442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90814ab78614543409cc4f930d7ef99b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1617396469219480
 GameObject:
   m_ObjectHideFlags: 0
