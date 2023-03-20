@@ -41,12 +41,10 @@ public class GenerateRoom : MonoBehaviour
     {
         if (Input.GetKeyDown("space")) {
             generateRoom();
-            generateFloorItems();
-            generateFloorItems();
-            generateFloorItems();
-            
-            //var position = new Vector3(Random.Range(minWidth, maxWidth), 0, Random.Range(-10.0f, 10.0f));
-            //Instantiate(prefab, position, Quaternion.identity); 
+            int n = Random.Range(5, 20); 
+            for (int i = 0; i < n; i ++) {
+                generateFloorItems();
+            }
         }
     }
 
@@ -71,12 +69,12 @@ public class GenerateRoom : MonoBehaviour
     void generateFloorItems() {
         float type = Random.Range(0.0f, 1.0f);
         var pos = getRandomPos(-roomDimension.y/2, -roomDimension.x/2, roomDimension.x/2, -roomDimension.z/2, roomDimension.z/2);
-        if (true) { // 10%
+        if (type < 0.4f) { 
             generateSmallItem(pos);
-        } else if (type < 0.4f) { // 30%
-            generateStackable(pos);
+        // } else if (type < 0.4f) { 
+        //     generateStackable(pos);
         }
-        else { // 60%
+        else { 
             generateFurniture(pos);
         } 
     }
@@ -85,10 +83,11 @@ public class GenerateRoom : MonoBehaviour
     void generateFurniture(Vector3 pos) {
         // 1 furniture
         GameObject obj = getRandomItem(listFurniture);
+        pos.y += obj.GetComponent<Collider>().bounds.size.y/2;
+        Instantiate(obj, pos, Quaternion.identity); 
         float top_of_furniture = pos.y + obj.GetComponent<Collider>().bounds.size.y;
         float obj_width_halved = obj.GetComponent<Collider>().bounds.size.x/2;
-        float obj_length_halved = obj.GetComponent<Collider>().bounds.size.z/2;
-        Instantiate(obj, pos, Quaternion.identity); 
+        float obj_length_halved = obj.GetComponent<Collider>().bounds.size.z/2;        
 
         // num things on top
         int n_on_top = Random.Range(0, 5);
@@ -98,9 +97,10 @@ public class GenerateRoom : MonoBehaviour
             // stackable or on top
             if (Random.Range(0.0f, 1.0f) < 0.5f) { // 50% 
                 generateSmallItem(pos);
-            } else {
-                generateStackable(pos);
             }
+            // } else {
+            //     generateStackable(pos);
+            // }
         }
     }
 
@@ -131,10 +131,12 @@ public class GenerateRoom : MonoBehaviour
 
     // generates one small item
     void generateSmallItem(Vector3 pos) {
-        Instantiate(getRandomItem(listSmallItems), pos, Quaternion.identity);
+        GameObject obj = getRandomItem(listSmallItems);
+        pos.y += obj.GetComponent<Collider>().bounds.size.y/2;
+        Instantiate(obj, pos, Quaternion.identity);
     }
 
-    Vector3 getRandomPos(float floor, float l, float r, float t, float d) { // lrtd = -z, z, -x, x
+    Vector3 getRandomPos(float floor, float l, float r, float t, float d) { // lrtd = -x, x, -z, z
         var position = new Vector3(Random.Range(l, r), floor, Random.Range(d, t));
         // check for collisions
 
@@ -142,9 +144,9 @@ public class GenerateRoom : MonoBehaviour
     }
 
     GameObject getRandomItem(GameObject[] list) {
-        Debug.Log(list.Length);
+        //Debug.Log(list.Length);
         int itemIndex = Random.Range(0, list.Length-1);
-        Debug.Log(list[itemIndex].name);
+        //Debug.Log(list[itemIndex].name);
         return list[itemIndex];
     }
 }
