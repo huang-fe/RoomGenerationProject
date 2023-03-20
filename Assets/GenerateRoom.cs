@@ -20,10 +20,20 @@ public class GenerateRoom : MonoBehaviour
 
     public GameObject[] walls; // array of walls    
 
+    // Arrays of assets
+    public static GameObject[] listFurniture;
+    public static GameObject[] listStackable;  
+    public static GameObject[] listSmallItems; 
+
     // Start is called before the first frame update
     void Start()
     {
         walls[4].transform.position = new Vector3(0, -wallHeight/2, 0); // floor
+
+        // load assets into arrays
+        listFurniture = Resources.LoadAll<GameObject>("Furniture");
+        listSmallItems = Resources.LoadAll<GameObject>("Stackable");
+        listSmallItems = Resources.LoadAll<GameObject>("Small Items");
     }
 
     // Update is called once per frame
@@ -131,7 +141,7 @@ public class GenerateRoom : MonoBehaviour
     }
 
     GameObject getRandomItem(List list) {
-        int itemIndex = Random.Range(0, list.size()-1);
+        int itemIndex = Random.Range(0, list.Length-1);
         return list[itemIndex];
     }
 }
