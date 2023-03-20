@@ -99,16 +99,16 @@ public class GenerateRoom : MonoBehaviour
         var c = obj.GetComponent<BoxCollider>();
         Debug.Log("collider x y z : " + c.size.x + c.size.y + c.size.z);
         // update bounds so item does not collide w wall
-        float l = obj.transform.localScale.x;
-        if (l < obj.transform.localScale.z) l = obj.transform.localScale.z;
+        float l = c.size.x;
+        if (l < c.size.z) l = c.size.z;
         b += new Vector4(l/2, -l/2, l/2, -l/2);
-        floor += obj.transform.localScale.y/2;
+        floor += c.size.y/2;
         var pos = getRandomPos(floor, b);
         instantiated.Add(Instantiate(obj, pos, Quaternion.identity)); 
 
-        float top_of_furniture = pos.y + obj.transform.localScale.y;
-        float obj_width_halved = obj.transform.localScale.x/2;
-        float obj_length_halved = obj.transform.localScale.z/2;        
+        float top_of_furniture = pos.y + c.size.y;
+        float obj_width_halved = c.size.x/2;
+        float obj_length_halved = c.size.z/2;        
         Vector4 bounds = new Vector4(pos.x - obj_width_halved, pos.x + obj_width_halved, pos.z - obj_length_halved, pos.z + obj_length_halved);
 
         // num things on top
