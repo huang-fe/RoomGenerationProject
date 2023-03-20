@@ -82,7 +82,6 @@ public class GenerateRoom : MonoBehaviour
 
     void generateFloorItems() {
         float type = Random.Range(0.0f, 1.0f);
-        var pos = getRandomPos(-roomDimension.y/2, roomBounds);
         if (type < 0.4f) {             
             // generateSmallItem(pos);
             generateItem(0.0f, roomBounds, listSmallItems);
@@ -90,32 +89,27 @@ public class GenerateRoom : MonoBehaviour
         //     generateStackable(pos);
         }
         else { 
-            generateFurniture(pos);
+            generateFurniture(-roomDimension.y/2, roomBounds);
         } 
     }
 
     // generates one furniture and potentially things on top
-    void generateFurniture(Vector3 pos) {
-
+    void generateFurniture(float floor, Vector4 b) {
+        GameObject obj = getRandomItem(listFurniture);
+        var c = obj.GetComponent<BoxCollider>();
+        Debug.Log("collider x y z : " + c.size.x + c.size.y + c.size.z);
+        // update bounds so item does not collide w wall
         float l = obj.transform.localScale.x;
         if (l < obj.transform.localScale.z) l = obj.transform.localScale.z;
-        // update bounds with obj's largest side for random position
         b += new Vector4(l/2, -l/2, l/2, -l/2);
-        // b += new Vector4(obj.transform.localScale.x/2, -obj.transform.localScale.x/2, obj.transform.localScale.z/2, -obj.transform.localScale.z/2);
         floor += obj.transform.localScale.y/2;
         var pos = getRandomPos(floor, b);
-
-        
-        GameObject obj = getRandomItem(listFurniture);
-        pos.y += obj.transform.localScale.y;
         instantiated.Add(Instantiate(obj, pos, Quaternion.identity)); 
 
         float top_of_furniture = pos.y + obj.transform.localScale.y;
         float obj_width_halved = obj.transform.localScale.x/2;
         float obj_length_halved = obj.transform.localScale.z/2;        
         Vector4 bounds = new Vector4(pos.x - obj_width_halved, pos.x + obj_width_halved, pos.z - obj_length_halved, pos.z + obj_length_halved);
-
-        return bounds;
 
         // num things on top
         int n_on_top = Random.Range(0, 5);
@@ -176,7 +170,7 @@ public class GenerateRoom : MonoBehaviour
     }
 
     Vector3 getRandomPos(float floor, Vector4 b) { // xyzw = -x, x, -z, z
-        Debug.Log(b);
+        //Debug.Log(b);
         return new Vector3(Random.Range(b.x, b.y), floor, Random.Range(b.z, b.w));  
     }
 
