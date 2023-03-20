@@ -77,26 +77,35 @@ public class GenerateRoom : MonoBehaviour
         
         // empty space is smaller
         roomDimension -= new Vector3(wallThickness, 0, wallThickness);
-        roomBounds = new Vector4(-roomDimension.x/2+wallThickness/2, roomDimension.x/2+wallThickness/2, -roomDimension.z/2+wallThickness/2, -roomDimension.z/2+wallThickness/2);
+        roomBounds = new Vector4(-roomDimension.x/2+wallThickness/2, roomDimension.x/2+wallThickness/2, -roomDimension.z/2+wallThickness/2, roomDimension.z/2+wallThickness/2);
     }
 
     void generateFloorItems() {
         float type = Random.Range(0.0f, 1.0f);
-        var pos = getRandomPos(0, -roomDimension.x/2, roomDimension.x/2, -roomDimension.z/2, roomDimension.z/2);
+        var pos = getRandomPos(-roomDimension.y/2, roomBounds);
         if (type < 0.4f) {             
-            generateSmallItem(pos);
+            // generateSmallItem(pos);
+            generateItem(0.0f, roomBounds, listSmallItems);
         // } else if (type < 0.4f) { 
         //     generateStackable(pos);
         }
         else { 
-            pos.y -= roomDimension.y/2;
             generateFurniture(pos);
         } 
     }
 
     // generates one furniture and potentially things on top
     void generateFurniture(Vector3 pos) {
-        // 1 furniture
+
+        float l = obj.transform.localScale.x;
+        if (l < obj.transform.localScale.z) l = obj.transform.localScale.z;
+        // update bounds with obj's largest side for random position
+        b += new Vector4(l/2, -l/2, l/2, -l/2);
+        // b += new Vector4(obj.transform.localScale.x/2, -obj.transform.localScale.x/2, obj.transform.localScale.z/2, -obj.transform.localScale.z/2);
+        floor += obj.transform.localScale.y/2;
+        var pos = getRandomPos(floor, b);
+
+        
         GameObject obj = getRandomItem(listFurniture);
         pos.y += obj.transform.localScale.y;
         instantiated.Add(Instantiate(obj, pos, Quaternion.identity)); 
@@ -104,15 +113,17 @@ public class GenerateRoom : MonoBehaviour
         float top_of_furniture = pos.y + obj.transform.localScale.y;
         float obj_width_halved = obj.transform.localScale.x/2;
         float obj_length_halved = obj.transform.localScale.z/2;        
+        Vector4 bounds = new Vector4(pos.x - obj_width_halved, pos.x + obj_width_halved, pos.z - obj_length_halved, pos.z + obj_length_halved);
+
+        return bounds;
 
         // num things on top
         int n_on_top = Random.Range(0, 5);
-        for (int i = 0; i < n_on_top; i ++) {
-            // new random position
-            var newPos = getRandomPos(top_of_furniture, pos.x - obj_width_halved, pos.x + obj_width_halved, pos.z - obj_length_halved, pos.z + obj_length_halved);
+        for (int i = 0; i < n_on_top; i ++) {            
             // stackable or on top
             if (Random.Range(0.0f, 1.0f) < 0.5f) { // 50% 
-                generateSmallItem(pos);
+                // generateSmallItem(top_of_furniture, bounds);
+                generateItem(top_of_furniture, bounds, listSmallItems);
             }
             // } else {
             //     generateStackable(pos);
@@ -121,42 +132,52 @@ public class GenerateRoom : MonoBehaviour
     }
 
     // generates >=1 stackable items & potentially things on top
-    void generateStackable(Vector3 pos) { 
-        GameObject obj = getRandomItem(listStackable);
-        Instantiate(obj, pos, Quaternion.identity);
-        var top_of_stack = pos + new Vector3(0, obj.GetComponent<Collider>().bounds.size.y, 0);
+    // void generateStackable(Vector3 pos) { 
+    //     GameObject obj = getRandomItem(listStackable);
+    //     Instantiate(obj, pos, Quaternion.identity);
+    //     var top_of_stack = pos + new Vector3(0, obj.GetComponent<Collider>().bounds.size.y, 0);
         
-        // n stackable items
-        int nStack =  Random.Range(0, 5);
-        for (int i = 0; i < nStack; i++) {
-            obj = getRandomItem(listStackable);
-            Instantiate(obj, top_of_stack, Quaternion.identity);
-            top_of_stack = top_of_stack + new Vector3(0, obj.GetComponent<Collider>().bounds.size.y, 0);
-        }
+    //     // n stackable items
+    //     int nStack =  Random.Range(0, 5);
+    //     for (int i = 0; i < nStack; i++) {
+    //         obj = getRandomItem(listStackable);
+    //         Instantiate(obj, top_of_stack, Quaternion.identity);
+    //         top_of_stack = top_of_stack + new Vector3(0, obj.GetComponent<Collider>().bounds.size.y, 0);
+    //     }
 
-        float obj_width_halved = obj.GetComponent<Collider>().bounds.size.x/2;
-        float obj_length_halved = obj.GetComponent<Collider>().bounds.size.z/2;
+    //     float obj_width_halved = obj.GetComponent<Collider>().bounds.size.x/2;
+    //     float obj_length_halved = obj.GetComponent<Collider>().bounds.size.z/2;
 
-        // generate small items
-        int nSmall = Random.Range(0, 5); // max small items determined by size of what's below?
-        for (int i = 0; i < nSmall; i++) {
-            var newPos = getRandomPos(top_of_stack.y, pos.x - obj_width_halved, pos.x + obj_width_halved, pos.z - obj_length_halved, pos.z + obj_length_halved);
-            generateSmallItem(newPos);
-        }
-    }
+    //     // generate small items
+    //     int nSmall = Random.Range(0, 5); // max small items determined by size of what's below?
+    //     for (int i = 0; i < nSmall; i++) {
+    //         var newPos = getRandomPos(top_of_stack.y, pos.x - obj_width_halved, pos.x + obj_width_halved, pos.z - obj_length_halved, pos.z + obj_length_halved);
+    //         generateSmallItem(newPos);
+    //     }
+    // }
 
     // generates one small item
-    void generateSmallItem(Vector3 pos) {
-        GameObject obj = getRandomItem(listSmallItems);
-        pos.y += obj.transform.localScale.y/2;
+    // void generateSmallItem(Vector3 pos) {
+    //     GameObject obj = getRandomItem(listSmallItems);
+    //     pos.y += obj.transform.localScale.y/2;
+    //     instantiated.Add(Instantiate(obj, pos, Quaternion.identity));
+    // }
+
+    void generateItem(float floor, Vector4 b, GameObject[] list) {
+        GameObject obj = getRandomItem(list);
+        float l = obj.transform.localScale.x;
+        if (l < obj.transform.localScale.z) l = obj.transform.localScale.z;
+        // update bounds with obj's largest side for random position
+        b += new Vector4(l/2, -l/2, l/2, -l/2);
+        // b += new Vector4(obj.transform.localScale.x/2, -obj.transform.localScale.x/2, obj.transform.localScale.z/2, -obj.transform.localScale.z/2);
+        floor += obj.transform.localScale.y/2;
+        var pos = getRandomPos(floor, b);
         instantiated.Add(Instantiate(obj, pos, Quaternion.identity));
     }
 
-    Vector3 getRandomPos(float floor, float l, float r, float t, float d, float hw, float hl) { // lrtd = -x, x, -z, z
-        var position = new Vector3(Random.Range(l, r), floor, Random.Range(d, t));
-        // collision with walls
-        
-        return position;
+    Vector3 getRandomPos(float floor, Vector4 b) { // xyzw = -x, x, -z, z
+        Debug.Log(b);
+        return new Vector3(Random.Range(b.x, b.y), floor, Random.Range(b.z, b.w));  
     }
 
     GameObject getRandomItem(GameObject[] list) {
