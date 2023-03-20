@@ -59,24 +59,35 @@ public class GenerateRoom : MonoBehaviour
     void generateFloorItems() {
         float type = Random.Range(0.0f, 1.0f);
         var pos = getRandomPos(-roomDimension.y/2, -roomDimension.z/2, roomDimension.z/2, -roomDimension.x/2, -roomDimension.x/2);
-        if (type > 0.5f) {
-            generateFurniture(pos);
-        }
-        else {
+        if (type < 0.1f) { // 10%
+            generateSmallItem(pos);
+        } else if (type < 0.4f) { // 30%
             generateStackable(pos);
         }
+        else { // 60%
+            generateFurniture(pos);
+        } 
     }
 
     void generateFurniture(var pos) {
         Instantiate(getRandomItem(listFurniture), pos, Quaternion.identity); 
     }
 
-    void generateStackable(var pos, int layer) {
+    // generates one stackable item & potentially things on top
+    void generateStackable(var pos, int layer) { 
+        GameObject obj = getRandomItem(listStackable);
+        Vector3 itemHeight = new Vector3(0, obj.GetComponent<Collider>().bounds.size.y, 0);
+        Instantiate(obj, pos + itemHeight, Quaternion.identity);
+        layer--;
+        generateStackable(, layer);
+
+
         if (layer == 0) { // top layer, small items
             int maxSmallItems = 5; // depend on size of what's below
             int n = Random.Range(0, maxSmallItems);
             for (int i = 0; i < n; i++) {
-                instantiateSmallItem();
+                var randomPos = getRandomPos();
+                instantiateSmallItem(randomPos);
             }
         } else {
             GameObject obj = getRandomItem(listStackable);
@@ -87,6 +98,7 @@ public class GenerateRoom : MonoBehaviour
         }
     }
 
+    // generates one small item
     void generateSmallItem(var pos) { 
         // get random asset
         Instantiate(getRandomItem(listSmall), pos, Quaternion.identity);
