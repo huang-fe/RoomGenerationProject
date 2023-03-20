@@ -92,31 +92,29 @@ public class GenerateRoom : MonoBehaviour
         }
     }
 
-    // generates one stackable item & potentially things on top
+    // generates >=1 stackable items & potentially things on top
     void generateStackable(var pos) { 
         GameObject obj = getRandomItem(listStackable);
-        Vector3 itemHeight = new Vector3(0, obj.GetComponent<Collider>().bounds.size.y, 0);
-        Instantiate(obj, pos + itemHeight, Quaternion.identity);
+        Instantiate(obj, pos, Quaternion.identity);
+        var top_of_stack = pos + new Vector3(0, obj.GetComponent<Collider>().bounds.size.y, 0);
         
-        int nStack =  Random.Range(0, 20);
-
+        // n stackable items
+        int nStack =  Random.Range(0, 5);
         for (int i = 0; i < nStack; i++) {
-            generateStackableItem();
+            obj = getRandomItem(listStackable);
+            Instantiate(obj, top_of_stack, Quaternion.identity);
+            top_of_stack = top_of_stack + new Vector3(0, obj.GetComponent<Collider>().bounds.size.y, 0);
         }
 
-        if (layer == 0) { // top layer, small items
-            int maxSmallItems = 5; // depend on size of what's below
-            int n = Random.Range(0, maxSmallItems);
-            for (int i = 0; i < n; i++) {
-                var randomPos = getRandomPos();
-                instantiateSmallItem(randomPos);
-            }
-        } 
-    }
-    // generates one stackable item
-    void generateStackableItem(var pos) { 
-        // get random asset
-        Instantiate(getRandomItem(listStackable), pos, Quaternion.identity);
+        float top_obj_width_halved = obj.GetComponent<Collider>().bounds.size.x/2;
+        float top_obj_length_halved = obj.GetComponent<Collider>().bounds.size.z/2;
+
+        // generate small items
+        int nSmall = Random.Range(0, 5); // max small items determined by size of what's below?
+        for (int i = 0; i < nSmall; i++) {
+            var newPos = getRandomPos(top_of_stack, pos.x - obj_width_halved, pos.x + obj_width_halved, pos.z - obj_length_halved, pos.z + obj_length_halved);
+            instantiateSmallItem(newPos);
+        }
     }
 
     // generates one small item
