@@ -25,6 +25,9 @@ public class GenerateRoom : MonoBehaviour
     public static GameObject[] listStackable;  
     public static GameObject[] listSmallItems; 
 
+    // List of Instantiated Objects
+    List<GameObject> instantiated = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +43,12 @@ public class GenerateRoom : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown("space")) {
+            if (instantiated.Count > 0) {
+                foreach (GameObject o in instantiated) {
+                    Destroy(o);
+                }
+                instantiated.Clear();
+            }
             generateRoom();
             int n = Random.Range(5, 20); 
             for (int i = 0; i < n; i ++) {
@@ -84,7 +93,8 @@ public class GenerateRoom : MonoBehaviour
         // 1 furniture
         GameObject obj = getRandomItem(listFurniture);
         pos.y += obj.GetComponent<Collider>().bounds.size.y/2;
-        Instantiate(obj, pos, Quaternion.identity); 
+        instantiated.Add(Instantiate(obj, pos, Quaternion.identity)); 
+
         float top_of_furniture = pos.y + obj.GetComponent<Collider>().bounds.size.y;
         float obj_width_halved = obj.GetComponent<Collider>().bounds.size.x/2;
         float obj_length_halved = obj.GetComponent<Collider>().bounds.size.z/2;        
@@ -133,7 +143,7 @@ public class GenerateRoom : MonoBehaviour
     void generateSmallItem(Vector3 pos) {
         GameObject obj = getRandomItem(listSmallItems);
         pos.y += obj.GetComponent<Collider>().bounds.size.y/2;
-        Instantiate(obj, pos, Quaternion.identity);
+        instantiated.Add(Instantiate(obj, pos, Quaternion.identity));
     }
 
     Vector3 getRandomPos(float floor, float l, float r, float t, float d) { // lrtd = -x, x, -z, z
