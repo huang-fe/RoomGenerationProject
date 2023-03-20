@@ -41,7 +41,7 @@ public class GenerateRoom : MonoBehaviour
     {
         if (Input.GetKeyDown("space")) {
             generateRoom();
-            //generateFurniture();
+            generateFloorItems();
             
             //var position = new Vector3(Random.Range(minWidth, maxWidth), 0, Random.Range(-10.0f, 10.0f));
             //Instantiate(prefab, position, Quaternion.identity); 
