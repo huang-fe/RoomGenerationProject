@@ -42,6 +42,8 @@ public class GenerateRoom : MonoBehaviour
         if (Input.GetKeyDown("space")) {
             generateRoom();
             generateFloorItems();
+            generateFloorItems();
+            generateFloorItems();
             
             //var position = new Vector3(Random.Range(minWidth, maxWidth), 0, Random.Range(-10.0f, 10.0f));
             //Instantiate(prefab, position, Quaternion.identity); 
@@ -69,7 +71,7 @@ public class GenerateRoom : MonoBehaviour
     void generateFloorItems() {
         float type = Random.Range(0.0f, 1.0f);
         var pos = getRandomPos(-roomDimension.y/2, -roomDimension.z/2, roomDimension.z/2, -roomDimension.x/2, -roomDimension.x/2);
-        if (type < 0.1f) { // 10%
+        if (true) { // 10%
             generateSmallItem(pos);
         } else if (type < 0.4f) { // 30%
             generateStackable(pos);
@@ -140,7 +142,9 @@ public class GenerateRoom : MonoBehaviour
     }
 
     GameObject getRandomItem(GameObject[] list) {
+        Debug.Log(list.Length);
         int itemIndex = Random.Range(0, list.Length-1);
+        Debug.Log(list[itemIndex].name);
         return list[itemIndex];
     }
 }
