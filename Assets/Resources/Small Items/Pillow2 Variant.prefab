@@ -14,15 +14,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 73666263d58f3da47a72732eaca35211, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 73666263d58f3da47a72732eaca35211, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.00035430916
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 73666263d58f3da47a72732eaca35211, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.000079838384
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 73666263d58f3da47a72732eaca35211, type: 3}
       propertyPath: m_LocalPosition.z
@@ -30,19 +30,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 73666263d58f3da47a72732eaca35211, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8262522
+      value: 0.69704056
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 73666263d58f3da47a72732eaca35211, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.00000003119021
+      value: -0.000000026312598
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 73666263d58f3da47a72732eaca35211, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000021263993
+      value: -0.00000002706717
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 73666263d58f3da47a72732eaca35211, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.56330043
+      value: 0.7170318
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 73666263d58f3da47a72732eaca35211, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 73666263d58f3da47a72732eaca35211, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 68.569
+      value: 91.62
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -91,8 +91,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.40064192, y: 0.7339464, z: 0.7915479}
-  m_Center: {x: -0.00090777886, y: 0.000044286255, z: -0.0006862432}
+  m_Size: {x: 0.40064192, y: 0.7339464, z: 0.7915478}
+  m_Center: {x: -0.0009077787, y: 0.00004428628, z: -0.00068616867}
 --- !u!54 &6795133535386386881
 Rigidbody:
   m_ObjectHideFlags: 0
