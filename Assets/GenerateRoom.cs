@@ -70,7 +70,7 @@ public class GenerateRoom : MonoBehaviour
 
     void generateFloorItems() {
         float type = Random.Range(0.0f, 1.0f);
-        var pos = getRandomPos(-roomDimension.y/2, -roomDimension.z/2, roomDimension.z/2, -roomDimension.x/2, -roomDimension.x/2);
+        var pos = getRandomPos(-roomDimension.y/2, -roomDimension.x/2, roomDimension.x/2, -roomDimension.z/2, roomDimension.z/2);
         if (true) { // 10%
             generateSmallItem(pos);
         } else if (type < 0.4f) { // 30%
