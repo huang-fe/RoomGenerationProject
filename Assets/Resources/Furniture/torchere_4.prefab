@@ -43,6 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5449386434618240403}
   - component: {fileID: 2241787141181557716}
+  - component: {fileID: 6520865928113584219}
   m_Layer: 0
   m_Name: torchere_4
   m_TagString: Floater
@@ -87,6 +88,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.35158017, y: 1.5684433, z: 1.5628083}
   m_Center: {x: 0.000000014901161, y: 1.5384886, z: 0.76299584}
+--- !u!114 &6520865928113584219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5629763857200332614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90814ab78614543409cc4f930d7ef99b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7267740406978478817
 GameObject:
   m_ObjectHideFlags: 0

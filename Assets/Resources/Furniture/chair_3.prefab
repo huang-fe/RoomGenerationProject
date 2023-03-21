@@ -259,6 +259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1803977276566719713}
   - component: {fileID: 3341366381359139480}
+  - component: {fileID: -590883085773494850}
   m_Layer: 0
   m_Name: chair_3
   m_TagString: Floater
@@ -303,6 +304,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.77517015, y: 0.67227185, z: 0.76661277}
   m_Center: {x: -0.000000029802322, y: 0.315875, z: 0.3307621}
+--- !u!114 &-590883085773494850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5037698715427880508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90814ab78614543409cc4f930d7ef99b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6432838669791968793
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,7 +23,7 @@ public class GenerateRoom : MonoBehaviour
 
     // Arrays of assets
     public static GameObject[] listFurniture;
-    public static GameObject[] listStackable;  
+    //public static GameObject[] listStackable;  
     public static GameObject[] listSmallItems; 
 
     // List of Instantiated Objects
@@ -36,7 +36,7 @@ public class GenerateRoom : MonoBehaviour
 
         // load assets into arrays
         listFurniture = Resources.LoadAll<GameObject>("Furniture");
-        listSmallItems = Resources.LoadAll<GameObject>("Stackable");
+        //listStackableItems = Resources.LoadAll<GameObject>("Stackable");
         listSmallItems = Resources.LoadAll<GameObject>("Small Items");
     }
 
@@ -97,18 +97,22 @@ public class GenerateRoom : MonoBehaviour
     void generateFurniture(float floor, Vector4 b) {
         GameObject obj = getRandomItem(listFurniture);
         var c = obj.GetComponent<BoxCollider>();
-        Debug.Log("collider x y z : " + c.size.x + c.size.y + c.size.z);
+        //Debug.Log("collider x y z : " + c.size.x + c.size.y + c.size.z);
         // update bounds so item does not collide w wall
         float l = c.size.x;
         if (l < c.size.z) l = c.size.z;
         b += new Vector4(l/2, -l/2, l/2, -l/2);
         if (obj.tag != "Floater") floor += c.size.y/2;
-        var pos = getRandomPos(floor, b);
-        instantiated.Add(Instantiate(obj, pos, obj.transform.rotation)); 
 
+        var pos = getRandomPos(floor, b);
+        if (furnitureCollides(pos, l/2)) {
+            return;
+        }
+        instantiated.Add(Instantiate(obj, pos, obj.transform.rotation)); 
+    
         float top_of_furniture = pos.y + c.size.y;
         float obj_width_halved = c.size.x/2;
-        float obj_length_halved = c.size.z/2;        
+        float obj_length_halved = c.size.z/2; 
         Vector4 bounds = new Vector4(pos.x - obj_width_halved, pos.x + obj_width_halved, pos.z - obj_length_halved, pos.z + obj_length_halved);
 
         // num things on top
@@ -181,5 +185,40 @@ public class GenerateRoom : MonoBehaviour
         return list[itemIndex];
     }
 
-    
+    bool furnitureCollides(Vector3 p, float hl) {
+        // 4 pts
+        float left = p.x - hl;
+        float right = p.x + hl;
+        float down = p.z - hl;
+        float up = p.z + hl;
+        foreach(GameObject o in instantiated) {
+            if (o.tag != "sm") { // check collision if furniture
+                var op = o.transform.position;
+                var c = o.GetComponent<BoxCollider>();
+                float ol = c.size.x;
+                if (ol < c.size.z) ol = c.size.z;
+                ol /= 2;
+
+                float l = op.x - ol;
+                float r = op.x + ol;
+                float d = op.z - ol;
+                float u = op.z + ol;
+
+                // check for each 4 pts, x is between left and right and if z is between down and up
+                if (left >= l && left <= r && down >= d && down <= u) { // left down
+                    return true;
+                }
+                if (left >= l && left <= r && up >= d && up <= u) { // left up
+                    return true;
+                }
+                if (right >= l && right <= r && down >= d && down <= u) { // right down
+                    return true;
+                }
+                if (right >= l && right <= r && up >= d && up <= u) { // right up
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

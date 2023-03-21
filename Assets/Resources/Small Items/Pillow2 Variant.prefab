@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pillow2 Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 73666263d58f3da47a72732eaca35211, type: 3}
+      propertyPath: m_TagString
+      value: sm
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 73666263d58f3da47a72732eaca35211, type: 3}
       propertyPath: m_RootOrder
       value: 0
