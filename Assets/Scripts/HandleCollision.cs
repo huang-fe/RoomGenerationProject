@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HandleCollision : MonoBehaviour
 {
+    // not actually handling collision, this is adding random rotations
     void Start() {
         int r = Random.Range(0, 3);
         for (int i = 0; i < r; i++) {

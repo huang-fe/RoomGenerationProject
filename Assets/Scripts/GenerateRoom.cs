@@ -16,7 +16,7 @@ public class GenerateRoom : MonoBehaviour
 
     private Vector3 roomDimension; // x = width, y = height, z = length
     private Vector4 roomBounds; // xyzw = -x, x, -z, z
-    private float maxLength = 20.0f;
+    private float maxLength = 16.0f;
     private float minLength = 5.0f;
 
     public GameObject[] walls; // array of walls    
@@ -44,6 +44,7 @@ public class GenerateRoom : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown("space")) {
+            //Instantiate(listSmallItems[6], Vector3.zero, Quaternion.identity);
             if (instantiated.Count > 0) {
                 foreach (GameObject o in instantiated) {
                     Destroy(o);
@@ -82,7 +83,7 @@ public class GenerateRoom : MonoBehaviour
 
     void generateFloorItems() {
         float type = Random.Range(0.0f, 1.0f);
-        if (type < 0.4f) {             
+        if (type < 0.3f) {             
             // generateSmallItem(pos);
             generateItem(0.0f, roomBounds, listSmallItems);
         // } else if (type < 0.4f) { 
@@ -180,17 +181,19 @@ public class GenerateRoom : MonoBehaviour
 
     GameObject getRandomItem(GameObject[] list) {
         //Debug.Log(list.Length);
-        int itemIndex = Random.Range(0, list.Length-1);
+        int itemIndex = Random.Range(0, list.Length);
         //Debug.Log(list[itemIndex].name);
         return list[itemIndex];
     }
 
     bool furnitureCollides(Vector3 p, float hl) {
+        if (instantiated.Count == 0) return false;
         // 4 pts
         float left = p.x - hl;
         float right = p.x + hl;
         float down = p.z - hl;
         float up = p.z + hl;
+        //Debug.Log("left " + left + " right " + right + " down " + down + " up" + up);
         foreach(GameObject o in instantiated) {
             if (o.tag != "sm") { // check collision if furniture
                 var op = o.transform.position;
@@ -203,6 +206,8 @@ public class GenerateRoom : MonoBehaviour
                 float r = op.x + ol;
                 float d = op.z - ol;
                 float u = op.z + ol;
+
+                Debug.Log("left " + l + " right " + r + " down " + d + " up" + u);
 
                 // check for each 4 pts, x is between left and right and if z is between down and up
                 if (left >= l && left <= r && down >= d && down <= u) { // left down
