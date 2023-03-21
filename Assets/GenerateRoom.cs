@@ -102,7 +102,7 @@ public class GenerateRoom : MonoBehaviour
         float l = c.size.x;
         if (l < c.size.z) l = c.size.z;
         b += new Vector4(l/2, -l/2, l/2, -l/2);
-        floor += c.size.y/2;
+        if (obj.tag != "Floater") floor += c.size.y/2;
         var pos = getRandomPos(floor, b);
         instantiated.Add(Instantiate(obj, pos, obj.transform.rotation)); 
 
