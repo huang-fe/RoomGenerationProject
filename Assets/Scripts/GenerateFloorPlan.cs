@@ -37,14 +37,27 @@ public class GenerateFloorPlan : MonoBehaviour
                 }
                 instantiated.Clear();
             }
-            var start = Random.Range(seg, 2 * seg);
-            goDown(new Vector3(0, 0, start));
+            var dir = Random.Range(0, 4);
+            var start = Random.Range(seg, l-seg);
+            if (dir == 0) {
+                goDown(new Vector3(0, 0, start));
+            } 
+            if (dir == 1) {
+                goUp(new Vector3(w, 0, start));
+            } 
+            start = Random.Range(seg, w-seg);
+            if (dir == 2) {
+                goRight(new Vector3(start, 0, 0));
+            } 
+            if (dir == 3) {
+                goLeft(new Vector3(start, 0, l));
+            } 
         }
     }
 
     // pick random l, go down random dist, go left or right random dist
     void goDown(Vector3 offset) { // x offset
-        var d = Random.Range(seg, 2 * seg);
+        var d = Random.Range(seg, w - seg);
 
         var p = offset + new Vector3(d/2, 0, 0);
         GameObject wall = Instantiate(cube, p, Quaternion.identity);
@@ -69,7 +82,7 @@ public class GenerateFloorPlan : MonoBehaviour
     }
 
     void goUp(Vector3 offset) { // go in x dir
-        var d = Random.Range(seg, 2 * seg);
+        var d = Random.Range(seg, w - seg);
 
         var p = offset - new Vector3(d/2, 0, 0);
         GameObject wall = Instantiate(cube, p, Quaternion.identity);
@@ -94,7 +107,7 @@ public class GenerateFloorPlan : MonoBehaviour
     }
 
     void goRight(Vector3 offset) { // go in z dir
-        var d = Random.Range(seg, 2 * seg);
+        var d = Random.Range(seg, l - seg);
 
         var p = offset + new Vector3(0, 0, d/2);
         GameObject wall = Instantiate(cube, p, Quaternion.identity);
@@ -118,7 +131,7 @@ public class GenerateFloorPlan : MonoBehaviour
     }
 
     void goLeft(Vector3 offset) { // go in z dir
-        var d = Random.Range(seg, 2 * seg);
+        var d = Random.Range(seg, l - seg);
 
         var p = offset - new Vector3(0, 0, d/2);
         GameObject wall = Instantiate(cube, p, Quaternion.identity);
